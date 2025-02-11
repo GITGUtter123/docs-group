@@ -32,6 +32,16 @@ export default function GoogleDocsGroups() {
     setFileName("");
   };
 
+  const removeDocument = (group, index) => {
+    setGroups((prev) => {
+      const updatedGroup = [...prev[group]];
+      updatedGroup.splice(index, 1);
+      const updated = { ...prev, [group]: updatedGroup };
+      if (updated[group].length === 0) delete updated[group];
+      return updated;
+    });
+  };
+
   return (
     <div className="p-6 max-w-lg mx-auto space-y-4">
       <h1 className="text-xl font-bold">Google Docs Group Manager</h1>
@@ -46,9 +56,12 @@ export default function GoogleDocsGroups() {
             <h2 className="font-semibold">{group}</h2>
             <CardContent>
               {groups[group].map((doc, index) => (
-                <p key={index} className="text-blue-500 underline">
-                  <a href={doc.link} target="_blank" rel="noopener noreferrer">{doc.name}</a>
-                </p>
+                <div key={index} className="flex justify-between items-center">
+                  <p className="text-blue-500 underline">
+                    <a href={doc.link} target="_blank" rel="noopener noreferrer">{doc.name}</a>
+                  </p>
+                  <Button onClick={() => removeDocument(group, index)} variant="destructive">Remove</Button>
+                </div>
               ))}
             </CardContent>
           </Card>
